@@ -1,54 +1,70 @@
-// Slide to WhatsApp (safe init)
-(function initSlideToWhatsapp() {
-  function setup() {
-    if (!window.jQuery) return false;
+// SLide to whatsapp
 
-    // draggable comes from jQuery UI
-    if (!$.fn || !$.fn.draggable) return false;
+$(".slide-submit button")
+  .draggable({
+    cancel: false,
+    containment: "parent",
+    axis: "x",
+    stop: function () {
+      console.log($(this).parent().width());
+      console.log($(this).position().left);
+      if ($(this).parent().width() / 2 < $(this).position().left + 100) {
+        // window.open(
+        // 	'https://api.whatsapp.com/send?phone=+917090000779&amp;text=I’m interested in the Godrej Bhandup project. Please send brochure and price details.',
+        // 	'_blank' // <- This is what makes it open in a new window.
+        //   );
+        // alert();
+        //   $('#whatsappClick button').trigger('click');
+        //   $('.whatsappClickClass').trigger('click');
+        //wa.me/+91?text=I'm%20interested%20in%20your%20car%20for%20sale
+        https: location.href =
+          "https://api.whatsapp.com/send?phone=917899200300&text=Hi%2C%20I%20am%20Interested%20for%20at%20Bangalore%20for%20Project%20Godrej%20IHP%20Yelahanka.%20Please%20send%20Offer%20%26%20Price%20Information.";
 
-    var $btn = $(".slide-submit button");
-    if (!$btn.length) return true; // nothing to bind
+        $(this).next().css({ "margin-left": 0 }).text("Launching WhatsApp");
+        $(this).draggable("false");
+        $(this).closest("form").submit();
+        $(".slide-submit button").css("left", "0px");
+      } else {
+        $(this).css({ left: 0 });
+        //   alert()
+      }
+    },
+  })
+  .on("click", function () {
+    return false;
+    alert();
+  });
 
-    // Prevent double-binding
-    if ($btn.data("draggable-bound")) return true;
-    $btn.data("draggable-bound", true);
+document.addEventListener("touchstart", touchHandler, true);
+document.addEventListener("touchmove", touchHandler, true);
+document.addEventListener("touchend", touchHandler, true);
+document.addEventListener("touchcancel", touchHandler, true);
+function touchHandler(event) {
+  var touch = event.changedTouches[0];
 
-    $btn.draggable({
-      cancel: false,
-      containment: "parent",
-      axis: "x",
-      stop: function () {
-        var $this = $(this);
-        var parentW = $this.parent().width();
-        var left = $this.position().left;
+  var simulatedEvent = document.createEvent("MouseEvent");
+  simulatedEvent.initMouseEvent(
+    {
+      touchstart: "mousedown",
+      touchmove: "mousemove",
+      touchend: "mouseup",
+    }[event.type],
+    true,
+    true,
+    window,
+    1,
+    touch.screenX,
+    touch.screenY,
+    touch.clientX,
+    touch.clientY,
+    false,
+    false,
+    false,
+    false,
+    0,
+    null
+  );
 
-        if (parentW / 2 < left + 100) {
-          location.href =
-            "https://api.whatsapp.com/send?phone=+91-7899200300&text=Hi%2C%20I%20am%20Interested%20for%20Godrej%20ISP%20IN%20Yelahanka.%20Please%20send%20Offer%20%26%20Price%20Information.";
-
-          $this.next().css({ "margin-left": 0 }).text("Launching WhatsApp");
-          try {
-            $this.draggable("disable");
-          } catch (e) {}
-          $this.css("left", "0px");
-        } else {
-          $this.css({ left: 0 });
-        }
-      },
-    });
-
-    $btn.on("click", function (e) {
-      e.preventDefault();
-      return false;
-    });
-
-    return true;
-  }
-
-  // Try immediately, else retry a few times (handles async loading)
-  var tries = 0;
-  var timer = setInterval(function () {
-    tries++;
-    if (setup() || tries > 50) clearInterval(timer); // ~5s max
-  }, 100);
-})();
+  touch.target.dispatchEvent(simulatedEvent);
+  //   event.preventDefault();
+}
