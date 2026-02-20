@@ -18,7 +18,7 @@ $(".slide-submit button")
         //   $('.whatsappClickClass').trigger('click');
         //wa.me/+91?text=I'm%20interested%20in%20your%20car%20for%20sale
         https: location.href =
-          "https://api.whatsapp.com/send?phone=917899200300&text=Hi%2C%20I%20am%20Interested%20for%20at%20Bangalore%20for%20Project%20Godrej%20IHP%20Yelahanka.%20Please%20send%20Offer%20%26%20Price%20Information.";
+          "https://api.whatsapp.com/send?phone=917899200300&text=Hi%2C%20I%20am%20Interested%20In%20Godrej%20IHP%20Yelahanka.%20Please%20share%20Offer%20Information.";
 
         $(this).next().css({ "margin-left": 0 }).text("Launching WhatsApp");
         $(this).draggable("false");
